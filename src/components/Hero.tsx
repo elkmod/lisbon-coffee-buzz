@@ -31,7 +31,7 @@ const Hero = () => {
         
         <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto leading-relaxed">
           Find, rate, and share your favorite coffee experiences in Portugal's capital. 
-          From traditional pastelarias to modern specialty roasters.
+          From traditional pastelarias to modern specialty roasters. Find all here!
         </p>
         
         {/* Search Bar */}
