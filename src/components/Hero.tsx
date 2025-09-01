@@ -30,8 +30,8 @@ const Hero = () => {
         </h1>
         
         <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto leading-relaxed">
-          Find, rate, and share your favorite coffee experiences in Portugal's capital. 
-          From traditional pastelarias to modern specialty roasters. Find all here!
+          Unlock Lisbon's hidden coffee gems! Join thousands discovering authentic cafés, 
+          from cozy neighborhood spots to award-winning roasters. Your perfect cup awaits!
         </p>
         
         {/* Search Bar */}
