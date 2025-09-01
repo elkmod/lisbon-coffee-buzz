@@ -17,30 +17,30 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 25 45% 8%;
 
-    --primary: 25 75% 35%;
+    --primary: 0 65% 45%;
     --primary-foreground: 43 47% 96%;
 
-    --secondary: 43 30% 90%;
-    --secondary-foreground: 25 45% 15%;
+    --secondary: 10 25% 90%;
+    --secondary-foreground: 0 45% 15%;
 
-    --muted: 43 30% 92%;
-    --muted-foreground: 25 25% 45%;
+    --muted: 10 20% 92%;
+    --muted-foreground: 0 25% 45%;
 
-    --accent: 33 75% 55%;
-    --accent-foreground: 25 45% 8%;
+    --accent: 15 85% 60%;
+    --accent-foreground: 0 45% 8%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 43 30% 88%;
-    --input: 43 30% 88%;
-    --ring: 33 75% 55%;
+    --border: 10 20% 88%;
+    --input: 10 20% 88%;
+    --ring: 15 85% 60%;
 
-    --coffee-dark: 25 45% 15%;
-    --coffee-medium: 25 60% 35%;
-    --coffee-light: 33 45% 65%;
-    --cream: 43 47% 96%;
-    --warm-gold: 45 85% 60%;
+    --coffee-dark: 10 45% 15%;
+    --coffee-medium: 0 60% 35%;
+    --coffee-light: 15 45% 65%;
+    --cream: 10 25% 96%;
+    --warm-gold: 25 85% 60%;
     
     --gradient-coffee: linear-gradient(135deg, hsl(var(--coffee-medium)), hsl(var(--accent)));
     --gradient-hero: linear-gradient(135deg, hsl(var(--coffee-dark)), hsl(var(--coffee-medium)));
@@ -76,30 +76,30 @@ All colors MUST be HSL.
     --popover: 25 45% 12%;
     --popover-foreground: 43 47% 96%;
 
-    --primary: 43 47% 96%;
-    --primary-foreground: 25 45% 8%;
+    --primary: 0 75% 85%;
+    --primary-foreground: 0 45% 8%;
 
-    --secondary: 25 35% 18%;
-    --secondary-foreground: 43 47% 96%;
+    --secondary: 0 25% 18%;
+    --secondary-foreground: 10 47% 96%;
 
-    --muted: 25 35% 18%;
-    --muted-foreground: 43 25% 70%;
+    --muted: 0 25% 18%;
+    --muted-foreground: 10 25% 70%;
 
-    --accent: 33 75% 55%;
-    --accent-foreground: 25 45% 8%;
+    --accent: 15 85% 60%;
+    --accent-foreground: 0 45% 8%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 25 35% 18%;
-    --input: 25 35% 18%;
-    --ring: 33 75% 55%;
+    --border: 0 25% 18%;
+    --input: 0 25% 18%;
+    --ring: 15 85% 60%;
 
-    --coffee-dark: 25 45% 8%;
-    --coffee-medium: 25 60% 25%;
-    --coffee-light: 33 45% 45%;
-    --cream: 25 35% 18%;
-    --warm-gold: 45 85% 60%;
+    --coffee-dark: 0 45% 8%;
+    --coffee-medium: 0 60% 25%;
+    --coffee-light: 15 45% 45%;
+    --cream: 0 25% 18%;
+    --warm-gold: 25 85% 60%;
     
     --gradient-coffee: linear-gradient(135deg, hsl(var(--coffee-medium)), hsl(var(--accent)));
     --gradient-hero: linear-gradient(135deg, hsl(var(--coffee-dark)), hsl(var(--coffee-medium)));
