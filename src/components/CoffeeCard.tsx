@@ -1,6 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { MapPin, Clock } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import StarRating from "./StarRating";
 import { cn } from "@/lib/utils";
 
@@ -23,13 +24,23 @@ interface CoffeeCardProps {
 }
 
 const CoffeeCard = ({ shop, onClick, className }: CoffeeCardProps) => {
+  const navigate = useNavigate();
+  
+  const handleClick = () => {
+    if (onClick) {
+      onClick();
+    } else {
+      navigate(`/cafe/${shop.id}`);
+    }
+  };
+
   return (
     <Card 
       className={cn(
         "group cursor-pointer overflow-hidden transition-all duration-300 hover:shadow-warm hover:-translate-y-1 bg-card border-border",
         className
       )}
-      onClick={onClick}
+      onClick={handleClick}
     >
       <div className="aspect-square overflow-hidden">
         <img 
