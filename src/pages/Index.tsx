@@ -41,10 +41,6 @@ const Index = () => {
               <CoffeeCard 
                 key={shop.id} 
                 shop={shop}
-                onClick={() => {
-                  // Navigate to detail page - will implement later
-                  console.log("Navigate to", shop.name);
-                }}
               />
             ))}
           </div>
