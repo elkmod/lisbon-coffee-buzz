@@ -12,15 +12,25 @@ const Hero = () => {
   return (
     <div className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
       {/* Auth Button */}
-      <div className="absolute top-4 right-4 z-20">
+      <div className="absolute top-4 right-4 z-20 flex gap-2">
         {user ? (
-          <Button 
-            variant="secondary" 
-            onClick={signOut}
-            className="bg-white/90 hover:bg-white"
-          >
-            Sign Out
-          </Button>
+          <>
+            <Button 
+              variant="secondary" 
+              onClick={() => navigate('/profile')}
+              className="bg-white/90 hover:bg-white"
+            >
+              <User className="h-4 w-4 mr-2" />
+              Profile
+            </Button>
+            <Button 
+              variant="secondary" 
+              onClick={signOut}
+              className="bg-white/90 hover:bg-white"
+            >
+              Sign Out
+            </Button>
+          </>
         ) : (
           <Button 
             variant="secondary" 
