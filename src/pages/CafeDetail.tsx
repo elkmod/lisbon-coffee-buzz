@@ -1,16 +1,97 @@
 import { useParams, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { ArrowLeft, MapPin, Clock, Phone, Globe, Star, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import StarRating from "@/components/StarRating";
+import RatingDialog from "@/components/RatingDialog";
 import { mockCoffeeShops } from "@/data/mockData";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const CafeDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const [ratingDialogOpen, setRatingDialogOpen] = useState(false);
+  const [userRating, setUserRating] = useState<{ rating: number; comment: string } | null>(null);
+  const [allRatings, setAllRatings] = useState<any[]>([]);
   
   const cafe = mockCoffeeShops.find(shop => shop.id === id);
+
+  useEffect(() => {
+    if (id) {
+      fetchRatings();
+      if (user) {
+        fetchUserRating();
+      }
+    }
+  }, [id, user]);
+
+  const fetchRatings = async () => {
+    const { data, error } = await supabase
+      .from('cafe_ratings')
+      .select('*, profiles(full_name)')
+      .eq('cafe_id', id)
+      .order('created_at', { ascending: false });
+
+    if (!error && data) {
+      setAllRatings(data);
+    }
+  };
+
+  const fetchUserRating = async () => {
+    if (!user) return;
+
+    const { data, error } = await supabase
+      .from('cafe_ratings')
+      .select('*')
+      .eq('cafe_id', id)
+      .eq('user_id', user.id)
+      .maybeSingle();
+
+    if (!error && data) {
+      setUserRating({ rating: Number(data.rating), comment: data.comment || '' });
+    }
+  };
+
+  const handleSubmitRating = async (rating: number, comment: string) => {
+    if (!user) {
+      toast.error('Please sign in to rate this café');
+      navigate('/auth');
+      return;
+    }
+
+    const { error } = await supabase
+      .from('cafe_ratings')
+      .upsert({
+        user_id: user.id,
+        cafe_id: id,
+        rating: rating,
+        comment: comment || null
+      }, {
+        onConflict: 'user_id,cafe_id'
+      });
+
+    if (error) {
+      toast.error('Failed to submit rating');
+    } else {
+      toast.success('Rating submitted successfully!');
+      setUserRating({ rating, comment });
+      fetchRatings();
+    }
+  };
+
+  const handleRateClick = () => {
+    if (!user) {
+      toast.error('Please sign in to rate this café');
+      navigate('/auth');
+      return;
+    }
+    setRatingDialogOpen(true);
+  };
   
   if (!cafe) {
     return (
@@ -77,7 +158,7 @@ const CafeDetail = () => {
                   <div className="flex items-center gap-4">
                     <StarRating rating={cafe.rating} size="lg" />
                     <span className="text-sm text-muted-foreground">
-                      ({cafe.reviewCount} reviews)
+                      ({allRatings.length} reviews)
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
@@ -87,6 +168,28 @@ const CafeDetail = () => {
                     </span>
                   </div>
                 </div>
+
+                {userRating && (
+                  <div className="mb-4 p-3 bg-accent/10 rounded-lg border border-accent/20">
+                    <p className="text-sm font-medium mb-2">Your Rating</p>
+                    <div className="flex items-center gap-2">
+                      <StarRating rating={userRating.rating} size="sm" showRating={false} />
+                      <span className="text-sm text-muted-foreground">{userRating.rating.toFixed(1)}</span>
+                    </div>
+                    {userRating.comment && (
+                      <p className="text-sm text-muted-foreground mt-2">{userRating.comment}</p>
+                    )}
+                  </div>
+                )}
+
+                <Button 
+                  onClick={handleRateClick}
+                  className="w-full"
+                  variant={userRating ? "outline" : "default"}
+                >
+                  <Star className="h-4 w-4 mr-2" />
+                  {userRating ? 'Update Your Rating' : 'Rate This Café'}
+                </Button>
                 
                 <div className="flex items-center gap-3">
                   <Badge variant="secondary" className="text-sm">
@@ -121,28 +224,37 @@ const CafeDetail = () => {
             <Card>
               <CardContent className="p-6">
                 <h2 className="text-xl font-semibold mb-4">Recent Reviews</h2>
-                <div className="space-y-4">
-                  {[
-                    { name: "Maria S.", rating: 5, comment: "Amazing coffee and pastries! The atmosphere is perfect for working." },
-                    { name: "João P.", rating: 4, comment: "Great espresso, friendly staff. A bit crowded during lunch time." },
-                    { name: "Ana L.", rating: 5, comment: "Best galão in the neighborhood. Highly recommend!" }
-                  ].map((review, index) => (
-                    <div key={index} className="border-b border-border last:border-0 pb-4 last:pb-0">
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="font-medium">{review.name}</span>
-                        <div className="flex">
-                          {Array.from({ length: 5 }).map((_, i) => (
-                            <Star 
-                              key={i} 
-                              className={`h-4 w-4 ${i < review.rating ? 'fill-warm-gold text-warm-gold' : 'text-muted-foreground'}`} 
-                            />
-                          ))}
+                {allRatings.length === 0 ? (
+                  <p className="text-muted-foreground text-center py-8">
+                    No reviews yet. Be the first to rate this café!
+                  </p>
+                ) : (
+                  <div className="space-y-4">
+                    {allRatings.map((review) => (
+                      <div key={review.id} className="border-b border-border last:border-0 pb-4 last:pb-0">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="font-medium">
+                            {review.profiles?.full_name || 'Anonymous'}
+                          </span>
+                          <div className="flex">
+                            {Array.from({ length: 5 }).map((_, i) => (
+                              <Star 
+                                key={i} 
+                                className={`h-4 w-4 ${i < Number(review.rating) ? 'fill-warm-gold text-warm-gold' : 'text-muted-foreground'}`} 
+                              />
+                            ))}
+                          </div>
                         </div>
+                        {review.comment && (
+                          <p className="text-sm text-muted-foreground">{review.comment}</p>
+                        )}
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {new Date(review.created_at).toLocaleDateString()}
+                        </p>
                       </div>
-                      <p className="text-sm text-muted-foreground">{review.comment}</p>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                )}
               </CardContent>
             </Card>
           </div>
@@ -207,6 +319,15 @@ const CafeDetail = () => {
           </div>
         </div>
       </div>
+
+      <RatingDialog
+        open={ratingDialogOpen}
+        onOpenChange={setRatingDialogOpen}
+        onSubmit={handleSubmitRating}
+        cafeName={cafe.name}
+        existingRating={userRating?.rating}
+        existingComment={userRating?.comment}
+      />
     </div>
   );
 };

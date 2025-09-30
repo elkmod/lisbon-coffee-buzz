@@ -1,11 +1,38 @@
 import { Button } from "@/components/ui/button";
-import { Search, MapPin } from "lucide-react";
+import { Search, MapPin, User } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { useAuth } from "@/contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 import heroImage from "@/assets/hero-coffee.jpg";
 
 const Hero = () => {
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+
   return (
     <div className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
+      {/* Auth Button */}
+      <div className="absolute top-4 right-4 z-20">
+        {user ? (
+          <Button 
+            variant="secondary" 
+            onClick={signOut}
+            className="bg-white/90 hover:bg-white"
+          >
+            Sign Out
+          </Button>
+        ) : (
+          <Button 
+            variant="secondary" 
+            onClick={() => navigate('/auth')}
+            className="bg-white/90 hover:bg-white"
+          >
+            <User className="h-4 w-4 mr-2" />
+            Sign In
+          </Button>
+        )}
+      </div>
+
       {/* Background Image */}
       <div className="absolute inset-0">
         <img 
