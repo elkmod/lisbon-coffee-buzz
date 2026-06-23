@@ -63,7 +63,7 @@ const Hero = () => {
         <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
           Discover the Best
           <span className="block text-accent">Coffee Spots</span>
-          in Lisbon
+          in Lisboa
         </h1>
         
         <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto leading-relaxed">
